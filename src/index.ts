@@ -33,7 +33,7 @@ export function runCheckAndReportProblems(root:  HTMLElement) {
     const elementsWithProblens = detectElementsWithProblems(root);
 
     const elemtWithProblemsWithoutPriorNotification 
-                                    = elementsWithProblens.filter(x => elementsAlreadyNotified.has(x));
+                                    = elementsWithProblens.filter(x => elementsAlreadyNotified.has(x) === false);
 
     if(elemtWithProblemsWithoutPriorNotification.length === 0){
         return;
