@@ -1,3 +1,3 @@
 # html-id-enforcer-for-autotesting
 
-Check to enforce elements relevant to user-interaction to have ids.
+Eenforce elements relevant to user-interaction to have ids.
