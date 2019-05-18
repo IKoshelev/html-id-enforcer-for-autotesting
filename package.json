@@ -1,6 +1,6 @@
 {
   "name": "html-id-enforcer-for-autotesting",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Check to enforce elements relevant to user-interaction to have ids",
   "keywords": [],
   "main": "./lib/src/index.js",

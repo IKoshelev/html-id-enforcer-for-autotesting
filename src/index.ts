@@ -4,6 +4,8 @@ export const eventsToLookFor: (keyof HTMLElementEventMap)[] =
     'dragstart', 'dragend',
     'keydown', 'keypress', 'keyup'];
 
+export const elementsAlreadyNotified = new WeakMap<HTMLElement,true>();
+
 export function startDetectingProblems(root: HTMLElement) {
     runCheckAndReportProblems(root);
 
@@ -30,13 +32,17 @@ export function detectElementsWithProblems(root: HTMLElement): HTMLElement[] {
 export function runCheckAndReportProblems(root:  HTMLElement) {
     const elementsWithProblens = detectElementsWithProblems(root);
 
-    if(elementsWithProblens.length === 0){
+    const elemtWithProblemsWithoutPriorNotification 
+                                    = elementsWithProblens.filter(x => elementsAlreadyNotified.has(x));
+
+    if(elemtWithProblemsWithoutPriorNotification.length === 0){
         return;
     }
 
     console.warn('Following elements appear to be reachable by user-interaction, but don\'t have an attributes for auto-test targeting (id).');
-    elementsWithProblens.forEach(elem => {
+    elemtWithProblemsWithoutPriorNotification.forEach(elem => {       
         console.warn(elem);
+        elementsAlreadyNotified.set(elem, true);
     });
 }
 
