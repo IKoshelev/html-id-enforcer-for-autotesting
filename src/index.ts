@@ -6,11 +6,13 @@ export const eventsToLookFor: (keyof HTMLElementEventMap)[] =
 
 export const elementsAlreadyNotified = new WeakMap<HTMLElement,true>();
 
-export function startDetectingProblems(root: HTMLElement) {
-    runCheckAndReportProblems(root);
+export type elemCheckFn = (elem:HTMLElement) => boolean;
+
+export function startDetectingProblems(root: HTMLElement, altCheck?:elemCheckFn) {
+    runCheckAndReportProblems(root, altCheck);
 
     // for now - just recheck on any changes; If the concept prooves beneficial - we will optimize
-    const mutationObserver = new MutationObserver(() => runCheckAndReportProblems(root));
+    const mutationObserver = new MutationObserver(() => runCheckAndReportProblems(root, altCheck));
     mutationObserver.observe(root, {
         attributes: true,
         subtree: true
@@ -19,18 +21,20 @@ export function startDetectingProblems(root: HTMLElement) {
     return mutationObserver;
 }
 
-export function detectElementsWithProblems(root: HTMLElement): HTMLElement[] {
+export function detectElementsWithProblems(root: HTMLElement, altCheck?: elemCheckFn): HTMLElement[] {
     const descendantsOfRoot = Array.from(root.querySelectorAll('*')) as HTMLElement[];
+
+    const elemIsOkCheck = altCheck || isElementTargetableByAutoTests;
 
     const problematicElements = descendantsOfRoot
                                         .filter(isElementRelevantToUserInteraction)
-                                        .filter(x => isElementTargetableByAutoTests(x) === false);
+                                        .filter(x => elemIsOkCheck(x) === false);
 
     return problematicElements;
 }
 
-export function runCheckAndReportProblems(root:  HTMLElement) {
-    const elementsWithProblens = detectElementsWithProblems(root);
+export function runCheckAndReportProblems(root:  HTMLElement, altCheck?:elemCheckFn) {
+    const elementsWithProblens = detectElementsWithProblems(root, altCheck);
 
     const elemtWithProblemsWithoutPriorNotification 
                                     = elementsWithProblens.filter(x => elementsAlreadyNotified.has(x) === false);
