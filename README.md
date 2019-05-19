@@ -15,8 +15,9 @@ Typical use.
 let observer = startDetectingProblems(document.body);
 ```
 
-React case, checks element itself to have an id or one of the elements within the same Component to have an id 
-(Obviously, cusom check would be have to be very specifi to your application case).
+React case, checks element itself to have an id or one of the ancestors within the same Component to have an id 
+(Obviously, custom check would have to be very specific to your practices).
+Hint, the check can be anything, not just 'id' presence.
 ```typescript
 
 let observer = startDetectingProblems(document.body, elementOrComponentHasId); 
