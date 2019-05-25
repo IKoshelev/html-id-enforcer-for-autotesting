@@ -10,8 +10,16 @@ and checks that they have 'id' attribute. Alternatively, you can provide you own
 Tracks DOM changes and retriggers check. 
 
 Typical use.
+
+```
+npm install -save-dev html-id-enforcer-for-autotesting
+```
+
+Make a file with below code and add it to the entry point of the development build in webpack (i.e. use 'multi-main entry'). The idea is to only load the file during development, so that devs see the message on local env/dev env.   
+
 ```typescript
 // you get back the obsever, so you can .disconnect() once no longer needed
+import { startDetectingProblems } from 'html-id-enforcer-for-autotesting';
 let observer = startDetectingProblems(document.body);
 ```
 
@@ -19,6 +27,7 @@ React case, checks element itself to have an id or one of the ancestors within t
 (Obviously, custom check would have to be very specific to your practices).
 Hint, the check can be anything, not just 'id' presence.
 ```typescript
+import { startDetectingProblems } from 'html-id-enforcer-for-autotesting';
 
 let observer = startDetectingProblems(document.body, elementOrComponentHasId); 
 
